@@ -17,7 +17,7 @@ labyMod {
     addonInfo {
         namespace = "customblocks"
         displayName = "GrieferGames CustomBlocks"
-        author = "Griefergames CosmoHDx"
+        author = "GrieferGames CosmoHDx"
         description = "Provides CustomBlocks for GrieferGames via LabyMod Fabric"
         minecraftVersion = "1.20<*"
         version = System.getenv().getOrDefault("VERSION", project.version.toString())
