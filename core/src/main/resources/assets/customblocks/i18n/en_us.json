@@ -1,0 +1,19 @@
+{
+  "customblocks": {
+    "settings": {
+      "name": "GrieferGames CustomBlocks",
+      "header": {
+        "installation": {
+          "name": "Installation"
+        }
+      },
+      "enabled": {
+        "name": "Enabled"
+      }
+    },
+    "missing_labyfabric": {
+      "title": "§4LabyFabric is not installed",
+      "content": "§fThe GrieferGames CustomBlocks cant be loaded."
+    }
+  }
+}

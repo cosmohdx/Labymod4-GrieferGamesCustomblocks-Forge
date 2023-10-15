@@ -1,0 +1,23 @@
+{
+  "customblocks": {
+    "settings": {
+      "name": "GrieferGames CustomBlocks",
+      "header": {
+        "installation": {
+          "name": "Installation"
+        }
+      },
+      "enabled": {
+        "name": "Aktiviert"
+      }
+    },
+    "missing_labyfabric": {
+      "title": "§4LabyFabric ist nicht installiert",
+      "content": "§fDie GrieferGames CustomBlocks können nicht geladen werden."
+    },
+    "fabricmod_updated": {
+      "title": "§aGrieferGames CustomBlocks wurde aktualisiert",
+      "content": "§fBitte starte dein Spiel neu, um die neuste Version zu verwenden."
+    }
+  }
+}
