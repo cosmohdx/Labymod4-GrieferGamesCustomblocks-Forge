@@ -19,9 +19,10 @@ import net.labymod.api.client.component.Component;
 import net.labymod.api.client.resources.ResourceLocation;
 import net.labymod.api.notification.Notification;
 
+/**
+ * Downloader of the FabricMod from Resources of the jar
+ */
 public class FabricModDownloader {
-
-  private static final String NAMESPACE = "customblocks";
 
   private final GrieferGamesCustomblocksAddon addon;
 
@@ -29,8 +30,14 @@ public class FabricModDownloader {
     this.addon = addon;
   }
 
+  /**
+   * Returns the path for the given path
+   *
+   * @param path path without assets/NAMESPACE/
+   * @return path with assets/NAMESPACE/
+   */
   private static String inPath(String path) {
-    return "assets/"+NAMESPACE+"/"+path;
+    return "assets/"+GrieferGamesCustomblocksAddon.NAMESPACE+"/"+path;
   }
 
   /**
@@ -39,12 +46,12 @@ public class FabricModDownloader {
    * @return InputStream
    */
   private InputStream getResourceAsStream(String path) throws IOException {
-    ResourceLocation location = ResourceLocation.create(NAMESPACE, path);
+    ResourceLocation location = ResourceLocation.create(GrieferGamesCustomblocksAddon.NAMESPACE, path);
     if(location.getClass().getSimpleName().equalsIgnoreCase("PathResourceLocation")) {
       return location.openStream();
     }
     String inPathString = inPath(path);
-    Optional<LoadedAddon> optionalAddon = Laby.labyAPI().addonService().getOptionalAddon(NAMESPACE);
+    Optional<LoadedAddon> optionalAddon = Laby.labyAPI().addonService().getOptionalAddon(GrieferGamesCustomblocksAddon.NAMESPACE);
     if(!optionalAddon.isPresent()) {
       return null;
     }
@@ -61,31 +68,40 @@ public class FabricModDownloader {
 
   /**
    * Downloads the FarbicMod for the given Version
+   *
    * @param version Version
+   * @return Notification if there is smth to display for the user
    */
-  public void downloadFabricModVersion(String version) {
+  public Notification downloadFabricModVersion(String version) {
     checkFabricPaths(version);
 
     VersionData versionData = getVersionData();
     if(versionData == null) {
-      return;
+      this.addon.logger().error("Failed to load version_data.json. Try update the LabyMod Addon.");
+      return Notification.builder()
+          .title(Component.translatable("customblocks.fabricmod_update_broken.title"))
+          .text(Component.translatable("customblocks.fabricmod_update_broken.content"))
+          .icon(GrieferGamesCustomblocksAddon.CUSTOMBLOCKS_ICON)
+          .build();
     }
 
     if(!versionData.versions.containsKey(version)) {
-      return;
+      this.addon.logger().info("No Fabric Mod for Minecraft "+version+" found");
+      return null;
     }
     if(checkModVersionExists(version, versionData.versions.get(version), versionData.fileName)) {
-      return;
+      this.addon.logger().info("Fabric Mod for Minecraft "+version+" is already up to date");
+      return null;
     }
     removeOlderVersions(version, versionData.versions.get(version), versionData.fileName);
-    downloadFabricMod(version, versionData.versions.get(version), versionData.fileName);
+    return downloadFabricMod(version, versionData.versions.get(version), versionData.fileName);
   }
 
   /**
    * Loads the VersionData from the version_data.json
    * @return VersionData
    */
-  private VersionData getVersionData() {
+  public VersionData getVersionData() {
     VersionData versionData = null;
     Gson gson = new Gson();
     try(InputStream data = getResourceAsStream("fabric-mod/version_data.json")){
@@ -110,6 +126,14 @@ public class FabricModDownloader {
     }
   }
 
+  /**
+   * Checks if the Fabric Mod is already downloaded
+   *
+   * @param mcVersion Minecraft Version
+   * @param farbicVersion Required Fabric Mod Version
+   * @param fileName File Name of the Fabric Mod
+   * @return true if the Fabric Mod is already downloaded
+   */
   private boolean checkModVersionExists(String mcVersion, String farbicVersion, String fileName) {
     return new File(
         GrieferGamesCustomblockConstants.versionedPath(GrieferGamesCustomblockConstants.MODS_DIRECTORY_PATH, mcVersion)
@@ -117,6 +141,13 @@ public class FabricModDownloader {
     ).exists();
   }
 
+  /**
+   * Removes older versions of the Fabric Mod
+   *
+   * @param mcVersion Minecraft Version
+   * @param farbicVersion Required Fabric Mod Version
+   * @param fileName File Name of the Fabric Mod
+   */
   private void removeOlderVersions(String mcVersion, String farbicVersion, String fileName) {
     File modsDirectory = GrieferGamesCustomblockConstants.versionedPath(GrieferGamesCustomblockConstants.MODS_DIRECTORY_PATH, mcVersion).toFile();
     File[] files = modsDirectory.listFiles();
@@ -129,14 +160,18 @@ public class FabricModDownloader {
 
   /**
    * Downloads the Fabric mod
-   * @param mcVersion
-   * @param farbicVersion
+   *
+   * @param mcVersion Minecraft Version
+   * @param farbicVersion Required Fabric Mod Version
+   * @param fileName File Name of the Fabric Mod
+   * @return Notification if the download was successful
    */
-  private void downloadFabricMod(String mcVersion, String farbicVersion, String fileName) {
+  private Notification downloadFabricMod(String mcVersion, String farbicVersion, String fileName) {
     File DOWNLOAD_AS_FILE = new File(
     GrieferGamesCustomblockConstants.versionedPath(GrieferGamesCustomblockConstants.MODS_DIRECTORY_PATH, mcVersion)
         .toFile(), fileName.replace("{minecraftVersion}", mcVersion).replace("{version}", farbicVersion)
     );
+    boolean success = false;
     try (BufferedInputStream in = new BufferedInputStream(getResourceAsStream("fabric-mod/"+mcVersion+".jar"))) {
       FileOutputStream fileOutputStream = new FileOutputStream(DOWNLOAD_AS_FILE);
       byte[] dataBuffer = new byte[1024];
@@ -144,17 +179,24 @@ public class FabricModDownloader {
       while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
         fileOutputStream.write(dataBuffer, 0, bytesRead);
       }
-      this.addon.labyAPI().notificationController().push(
-          Notification.builder()
-              .title(Component.translatable("customblocks.fabricmod_updated.title"))
-              .text(Component.translatable("customblocks.fabricmod_updated.content"))
-              .icon(GrieferGamesCustomblocksAddon.CUSTOMBLOCKS_ICON)
-              .build()
-      );
       this.addon.logger().info("Updated Fabric Mod to version "+farbicVersion+" for Minecraft "+mcVersion);
+      success = true;
     } catch (Exception e) {
       // handle exception
       e.printStackTrace();
+    }
+    if(success) {
+      return Notification.builder()
+          .title(Component.translatable("customblocks.fabricmod_updated.title"))
+          .text(Component.translatable("customblocks.fabricmod_updated.content"))
+          .icon(GrieferGamesCustomblocksAddon.CUSTOMBLOCKS_ICON)
+          .build();
+    }else{
+      return Notification.builder()
+          .title(Component.translatable("customblocks.fabricmod_update_error.title"))
+          .text(Component.translatable("customblocks.fabricmod_update_error.content"))
+          .icon(GrieferGamesCustomblocksAddon.CUSTOMBLOCKS_ICON)
+          .build();
     }
   }
 

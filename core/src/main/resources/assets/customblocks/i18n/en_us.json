@@ -9,11 +9,27 @@
       },
       "enabled": {
         "name": "Enabled"
+      },
+      "curseForgeButton": {
+        "name": "FabricMod at CurseForge",
+        "text": "Open"
       }
     },
     "missing_labyfabric": {
       "title": "§4LabyFabric is not installed",
       "content": "§fThe GrieferGames CustomBlocks cant be loaded."
+    },
+    "fabricmod_updated": {
+      "title": "§aCustomBlocks has been updated",
+      "content": "§fPlease restart your game to play the new version."
+    },
+    "fabricmod_update_error": {
+      "title": "§cUpdate terminated",
+      "content": "§fGrieferGames CustomBlocks cant be updated."
+    },
+    "fabricmod_update_broken": {
+      "title": "§cUpdate terminated",
+      "content": "§fGrieferGames CustomBlocks cant be updated."
     }
   }
 }

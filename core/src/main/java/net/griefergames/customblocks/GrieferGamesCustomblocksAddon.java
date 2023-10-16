@@ -15,22 +15,44 @@ import net.labymod.api.notification.Notification;
 @AddonMain
 public class GrieferGamesCustomblocksAddon extends LabyAddon<GrieferGamesCustomblocksConfiguration> {
 
-  private static final String NAMESPACE = Laby.labyAPI().getNamespace(GrieferGamesCustomblocksAddon.class);
+  public static final String NAMESPACE = Laby.labyAPI().getNamespace(GrieferGamesCustomblocksAddon.class);
   public static final Icon CUSTOMBLOCKS_ICON = Icon.texture(ResourceLocation.create(NAMESPACE, "textures/icon.png"));
+
+  private FabricModDownloader downloader;
+
+  private FabricModDownloader getDownloader() {
+    if(downloader == null) {
+      downloader = new FabricModDownloader(this);
+    }
+    return downloader;
+  }
 
   @Override
   protected void enable() {
     this.registerSettingCategory();
   }
 
+  /**
+   * Listens to own AddonPostEnableEvent to download the FabricMod
+   * @param event AddonPostEnableEvent
+   */
+  @Subscribe
   public void on(AddonPostEnableEvent event) {
-    FabricModDownloader downloader = new FabricModDownloader(this);
+    if(!this.configuration().enabled().get()) {
+      return;
+    }
     logger().info("Downloading FabricMod for Version: " + this.labyAPI().minecraft().getVersion());
-    downloader.downloadFabricModVersion(this.labyAPI().minecraft().getVersion());
+    Notification notification = getDownloader().downloadFabricModVersion(this.labyAPI().minecraft().getVersion());
+    if(notification != null) {
+      this.labyAPI().notificationController().push(notification);
+    }
   }
 
   @Subscribe
   public void on(GlobalAddonPostEnableEvent event) {
+    if(!this.configuration().enabled().get()) {
+      return;
+    }
     if(this.labyAPI().addonService().getAddon(GrieferGamesCustomblockConstants.LABY_FABRIC_ADDON_NAME).isEmpty()) {
       this.labyAPI().notificationController().push(
           Notification.builder()
