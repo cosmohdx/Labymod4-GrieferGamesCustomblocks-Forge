@@ -17,7 +17,6 @@ import net.labymod.api.Laby;
 import net.labymod.api.addon.LoadedAddon;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.resources.ResourceLocation;
-import net.labymod.api.models.version.Version;
 import net.labymod.api.modloader.ModLoaderId;
 import net.labymod.api.modloader.ModLoaderRegistry;
 import net.labymod.api.modloader.mod.ModInfo;
