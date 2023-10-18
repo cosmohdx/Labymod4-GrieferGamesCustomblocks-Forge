@@ -155,6 +155,7 @@ public class FabricModDownloader {
    * @param fileName File Name of the Fabric Mod
    */
   private void removeOlderVersions(String mcVersion, String farbicVersion, String fileName) {
+    //@TODO Change to ModLoaderRegistry when its possible within api
     File modsDirectory = GrieferGamesCustomblockConstants.versionedPath(GrieferGamesCustomblockConstants.MODS_DIRECTORY_PATH, mcVersion).toFile();
     File[] files = modsDirectory.listFiles();
     for(File file : files) {
