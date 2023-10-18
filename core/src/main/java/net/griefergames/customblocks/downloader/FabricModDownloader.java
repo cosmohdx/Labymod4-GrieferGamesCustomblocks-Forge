@@ -17,7 +17,12 @@ import net.labymod.api.Laby;
 import net.labymod.api.addon.LoadedAddon;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.resources.ResourceLocation;
+import net.labymod.api.models.version.Version;
+import net.labymod.api.modloader.ModLoaderId;
+import net.labymod.api.modloader.ModLoaderRegistry;
+import net.labymod.api.modloader.mod.ModInfo;
 import net.labymod.api.notification.Notification;
+import net.labymod.api.util.version.SemanticVersion;
 
 /**
  * Downloader of the FabricMod from Resources of the jar
@@ -135,10 +140,11 @@ public class FabricModDownloader {
    * @return true if the Fabric Mod is already downloaded
    */
   private boolean checkModVersionExists(String mcVersion, String farbicVersion, String fileName) {
-    return new File(
-        GrieferGamesCustomblockConstants.versionedPath(GrieferGamesCustomblockConstants.MODS_DIRECTORY_PATH, mcVersion)
-            .toFile(), fileName.replace("{minecraftVersion}", mcVersion).replace("{version}", farbicVersion)
-    ).exists();
+    ModInfo customBlocksMod = ModLoaderRegistry.instance().getById(ModLoaderId.FABRIC).getModInfo("mysterymod_customblocks");
+    if(customBlocksMod == null) {
+      return false;
+    }
+    return !customBlocksMod.version().isLowerThan(new SemanticVersion(farbicVersion));
   }
 
   /**
