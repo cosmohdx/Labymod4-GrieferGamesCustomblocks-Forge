@@ -27,17 +27,12 @@ public class GrieferGamesCustomblocksAddon extends LabyAddon<GrieferGamesCustomb
     return downloader;
   }
 
+  /**
+   * Download the fabric mod on enable
+   */
   @Override
   protected void enable() {
     this.registerSettingCategory();
-  }
-
-  /**
-   * Listens to own AddonPostEnableEvent to download the FabricMod
-   * @param event AddonPostEnableEvent
-   */
-  @Subscribe
-  public void on(AddonPostEnableEvent event) {
     if(!this.configuration().enabled().get()) {
       return;
     }
