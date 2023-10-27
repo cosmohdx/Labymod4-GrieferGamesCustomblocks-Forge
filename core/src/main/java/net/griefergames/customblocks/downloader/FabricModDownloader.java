@@ -28,6 +28,8 @@ import net.labymod.api.util.version.SemanticVersion;
  */
 public class FabricModDownloader {
 
+  private static final String FABRIC_API_FILE_NAME = "fabric-api-{version}+{minecraftVersion}.jar";
+
   private final GrieferGamesCustomblocksAddon addon;
 
   public FabricModDownloader(GrieferGamesCustomblocksAddon addon) {
@@ -93,12 +95,32 @@ public class FabricModDownloader {
       this.addon.logger().info("No Fabric Mod for Minecraft "+version+" found");
       return null;
     }
-    if(checkModVersionExists(version, versionData.versions.get(version), versionData.fileName)) {
+    downloadFabricApiVersion(versionData, version);
+    if(checkModVersionExists(versionData.versions.get(version))) {
       this.addon.logger().info("Fabric Mod for Minecraft "+version+" is already up to date");
       return null;
     }
     removeOlderVersions(version, versionData.versions.get(version), versionData.fileName);
     return downloadFabricMod(version, versionData.versions.get(version), versionData.fileName);
+  }
+
+  /**
+   *  Downloads the Farbic API for the given Version
+   *
+   * @param versionData VersionData
+   * @param version Minecraft Version
+   */
+  private void downloadFabricApiVersion(VersionData versionData, String version) {
+    if(!versionData.api.containsKey(version)) {
+      this.addon.logger().info("No Fabric API for Minecraft "+version+" found");
+      return;
+    }
+    if(checkFabricApiVersionExists(versionData.api.get(version))) {
+      this.addon.logger().info("Fabric API for Minecraft "+version+" is already up to date");
+      return;
+    }
+    removeOlderVersions(version, versionData.api.get(version), "fabric-api-");
+    downloadFabricAPI(version, versionData.api.get(version), FABRIC_API_FILE_NAME);
   }
 
   /**
@@ -133,17 +155,28 @@ public class FabricModDownloader {
   /**
    * Checks if the Fabric Mod is already downloaded
    *
-   * @param mcVersion Minecraft Version
    * @param farbicVersion Required Fabric Mod Version
-   * @param fileName File Name of the Fabric Mod
    * @return true if the Fabric Mod is already downloaded
    */
-  private boolean checkModVersionExists(String mcVersion, String farbicVersion, String fileName) {
+  private boolean checkModVersionExists(String farbicVersion) {
     ModInfo customBlocksMod = ModLoaderRegistry.instance().getById(ModLoaderId.FABRIC).getModInfo("mysterymod_customblocks");
     if(customBlocksMod == null) {
       return false;
     }
     return !customBlocksMod.version().isLowerThan(new SemanticVersion(farbicVersion));
+  }
+
+  /**
+   * Checks if the Fabric API is already downloaded
+   * @param apiVersion Required Fabric API Version
+   * @return true if the Fabric API is already downloaded
+   */
+  private boolean checkFabricApiVersionExists(String apiVersion) {
+    ModInfo fabricApiMod = ModLoaderRegistry.instance().getById(ModLoaderId.FABRIC).getModInfo("fabric-api");
+    if(fabricApiMod == null) {
+      return false;
+    }
+    return !fabricApiMod.version().isLowerThan(new SemanticVersion(apiVersion));
   }
 
   /**
@@ -203,6 +236,32 @@ public class FabricModDownloader {
           .text(Component.translatable("customblocks.fabricmod_update_error.content"))
           .icon(GrieferGamesCustomblocksAddon.CUSTOMBLOCKS_ICON)
           .build();
+    }
+  }
+
+  /**
+   * Downloads the Fabric api
+   *
+   * @param mcVersion Minecraft Version
+   * @param fabricApiVersion Required Fabric API Version
+   * @param fileName File Name of the Fabric Mod
+   */
+  private void downloadFabricAPI(String mcVersion, String fabricApiVersion, String fileName) {
+    File DOWNLOAD_AS_FILE = new File(
+        GrieferGamesCustomblockConstants.versionedPath(GrieferGamesCustomblockConstants.MODS_DIRECTORY_PATH, mcVersion)
+            .toFile(), fileName.replace("{minecraftVersion}", mcVersion).replace("{version}", fabricApiVersion)
+    );
+    try (BufferedInputStream in = new BufferedInputStream(getResourceAsStream("fabric-mod/fabric-api/"+mcVersion+".jar"))) {
+      FileOutputStream fileOutputStream = new FileOutputStream(DOWNLOAD_AS_FILE);
+      byte[] dataBuffer = new byte[1024];
+      int bytesRead;
+      while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+        fileOutputStream.write(dataBuffer, 0, bytesRead);
+      }
+      this.addon.logger().info("Updated Fabric API to version "+fabricApiVersion+" for Minecraft "+mcVersion);
+    } catch (Exception e) {
+      // handle exception
+      e.printStackTrace();
     }
   }
 

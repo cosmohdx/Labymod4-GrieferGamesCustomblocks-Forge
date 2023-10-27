@@ -1,6 +1,9 @@
 {
   "fileName": "MysteryBlocks-{minecraftVersion}-{version}.jar",
   "versions": {
-    "1.20.1": "1.0.1"
+    "1.20.1": "1.0.2"
+  },
+  "api": {
+    "1.20.1": "0.83.0"
   }
 }
