@@ -12,9 +12,9 @@ import net.labymod.api.models.addon.annotation.AddonMain;
 import net.labymod.api.notification.Notification;
 
 @AddonMain
-public class GrieferGamesCustomblocksAddon extends LabyAddon<GrieferGamesCustomblocksConfiguration> {
+public class GrieferGamesCustomblocksForgeAddon extends LabyAddon<GrieferGamesCustomblocksConfiguration> {
 
-  public static final String NAMESPACE = Laby.labyAPI().getNamespace(GrieferGamesCustomblocksAddon.class);
+  public static final String NAMESPACE = Laby.labyAPI().getNamespace(GrieferGamesCustomblocksForgeAddon.class);
   public static final Icon CUSTOMBLOCKS_ICON = Icon.texture(ResourceLocation.create(NAMESPACE, "textures/icon.png"));
 
   private ForgeModDownloader downloader;

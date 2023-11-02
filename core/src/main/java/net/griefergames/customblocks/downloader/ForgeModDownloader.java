@@ -12,7 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.attribute.FileAttribute;
 import java.util.Optional;
 import net.griefergames.customblocks.GrieferGamesCustomblockConstants;
-import net.griefergames.customblocks.GrieferGamesCustomblocksAddon;
+import net.griefergames.customblocks.GrieferGamesCustomblocksForgeAddon;
 import net.labymod.api.Laby;
 import net.labymod.api.addon.LoadedAddon;
 import net.labymod.api.client.component.Component;
@@ -28,9 +28,9 @@ import net.labymod.api.util.version.SemanticVersion;
  */
 public class ForgeModDownloader {
 
-  private final GrieferGamesCustomblocksAddon addon;
+  private final GrieferGamesCustomblocksForgeAddon addon;
 
-  public ForgeModDownloader(GrieferGamesCustomblocksAddon addon) {
+  public ForgeModDownloader(GrieferGamesCustomblocksForgeAddon addon) {
     this.addon = addon;
   }
 
@@ -41,7 +41,7 @@ public class ForgeModDownloader {
    * @return path with assets/NAMESPACE/
    */
   private static String inPath(String path) {
-    return "assets/"+GrieferGamesCustomblocksAddon.NAMESPACE+"/"+path;
+    return "assets/"+ GrieferGamesCustomblocksForgeAddon.NAMESPACE+"/"+path;
   }
 
   /**
@@ -50,12 +50,13 @@ public class ForgeModDownloader {
    * @return InputStream
    */
   private InputStream getResourceAsStream(String path) throws IOException {
-    ResourceLocation location = ResourceLocation.create(GrieferGamesCustomblocksAddon.NAMESPACE, path);
+    ResourceLocation location = ResourceLocation.create(GrieferGamesCustomblocksForgeAddon.NAMESPACE, path);
     if(location.getClass().getSimpleName().equalsIgnoreCase("PathResourceLocation")) {
       return location.openStream();
     }
     String inPathString = inPath(path);
-    Optional<LoadedAddon> optionalAddon = Laby.labyAPI().addonService().getOptionalAddon(GrieferGamesCustomblocksAddon.NAMESPACE);
+    Optional<LoadedAddon> optionalAddon = Laby.labyAPI().addonService().getOptionalAddon(
+        GrieferGamesCustomblocksForgeAddon.NAMESPACE);
     if(!optionalAddon.isPresent()) {
       return null;
     }
@@ -85,7 +86,7 @@ public class ForgeModDownloader {
       return Notification.builder()
           .title(Component.translatable("customblocks_forge.forgemod_update_broken.title"))
           .text(Component.translatable("customblocks_forge.forgemod_update_broken.content"))
-          .icon(GrieferGamesCustomblocksAddon.CUSTOMBLOCKS_ICON)
+          .icon(GrieferGamesCustomblocksForgeAddon.CUSTOMBLOCKS_ICON)
           .build();
     }
 
@@ -193,13 +194,13 @@ public class ForgeModDownloader {
       return Notification.builder()
           .title(Component.translatable("customblocks_forge.forgemod_updated.title"))
           .text(Component.translatable("customblocks_forge.forgemod_updated.content"))
-          .icon(GrieferGamesCustomblocksAddon.CUSTOMBLOCKS_ICON)
+          .icon(GrieferGamesCustomblocksForgeAddon.CUSTOMBLOCKS_ICON)
           .build();
     }else{
       return Notification.builder()
           .title(Component.translatable("customblocks_forge.forgemod_update_error.title"))
           .text(Component.translatable("customblocks_forge.forgemod_update_error.content"))
-          .icon(GrieferGamesCustomblocksAddon.CUSTOMBLOCKS_ICON)
+          .icon(GrieferGamesCustomblocksForgeAddon.CUSTOMBLOCKS_ICON)
           .build();
     }
   }
