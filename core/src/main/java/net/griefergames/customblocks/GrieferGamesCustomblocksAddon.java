@@ -27,7 +27,7 @@ public class GrieferGamesCustomblocksAddon extends LabyAddon<GrieferGamesCustomb
   }
 
   /**
-   * Download the fabric mod on enable
+   * Download the forge mod on enable
    */
   @Override
   protected void enable() {
@@ -35,7 +35,7 @@ public class GrieferGamesCustomblocksAddon extends LabyAddon<GrieferGamesCustomb
     if(!this.configuration().enabled().get()) {
       return;
     }
-    logger().info("Downloading FabricMod for Version: " + this.labyAPI().minecraft().getVersion());
+    logger().info("Downloading ForgeMod for Version: " + this.labyAPI().minecraft().getVersion());
     Notification notification = getDownloader().downloadForgeModVersion(this.labyAPI().minecraft().getVersion());
     if(notification != null) {
       this.labyAPI().notificationController().push(notification);
@@ -47,11 +47,11 @@ public class GrieferGamesCustomblocksAddon extends LabyAddon<GrieferGamesCustomb
     if(!this.configuration().enabled().get()) {
       return;
     }
-    if(this.labyAPI().addonService().getAddon(GrieferGamesCustomblockConstants.LABY_FABRIC_ADDON_NAME).isEmpty()) {
+    if(this.labyAPI().addonService().getAddon(GrieferGamesCustomblockConstants.LABY_FORGE_ADDON_NAME).isEmpty()) {
       this.labyAPI().notificationController().push(
           Notification.builder()
-              .title(Component.translatable("customblocks.missing_labyfabric.title"))
-              .text(Component.translatable("customblocks.missing_labyfabric.content"))
+              .title(Component.translatable("customblocks_forge.missing_labyforge.title"))
+              .text(Component.translatable("customblocks_forge.missing_labyforge.content"))
               .icon(CUSTOMBLOCKS_ICON)
               .build()
       );

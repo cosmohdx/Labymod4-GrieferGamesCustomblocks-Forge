@@ -11,6 +11,4 @@ public class VersionData {
 
   public Map<String, String> versions = new HashMap<>();
 
-  public Map<String, String> api = new HashMap<>();
-
 }

@@ -1,5 +1,5 @@
 {
-  "customblocks": {
+  "customblocks_forge": {
     "settings": {
       "name": "GrieferGames CustomBlocks",
       "header": {
@@ -11,23 +11,23 @@
         "name": "Enabled"
       },
       "curseForgeButton": {
-        "name": "FabricMod at CurseForge",
+        "name": "ForgeMod at CurseForge",
         "text": "Open"
       }
     },
-    "missing_labyfabric": {
-      "title": "§4LabyFabric is not installed",
+    "missing_labyforge": {
+      "title": "§4Forge Loader is not installed",
       "content": "§fThe GrieferGames CustomBlocks cant be loaded."
     },
-    "fabricmod_updated": {
+    "forgemod_updated": {
       "title": "§aCustomBlocks has been updated",
       "content": "§fPlease restart your game to play the new version."
     },
-    "fabricmod_update_error": {
+    "forgemod_update_error": {
       "title": "§cUpdate terminated",
       "content": "§fGrieferGames CustomBlocks cant be updated."
     },
-    "fabricmod_update_broken": {
+    "forgemod_update_broken": {
       "title": "§cUpdate terminated",
       "content": "§fGrieferGames CustomBlocks cant be updated."
     }
