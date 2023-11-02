@@ -1,4 +1,4 @@
-rootProject.name = "griefergames_customblocks"
+rootProject.name = "griefergames_customblocks_forge"
 
 pluginManagement {
     val labyGradlePluginVersion = "0.3.25"

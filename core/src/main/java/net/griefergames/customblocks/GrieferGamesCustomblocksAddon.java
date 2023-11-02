@@ -1,13 +1,12 @@
 package net.griefergames.customblocks;
 
-import net.griefergames.customblocks.downloader.FabricModDownloader;
+import net.griefergames.customblocks.downloader.ForgeModDownloader;
 import net.labymod.api.Laby;
 import net.labymod.api.addon.LabyAddon;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.gui.icon.Icon;
 import net.labymod.api.client.resources.ResourceLocation;
 import net.labymod.api.event.Subscribe;
-import net.labymod.api.event.addon.lifecycle.AddonPostEnableEvent;
 import net.labymod.api.event.addon.lifecycle.GlobalAddonPostEnableEvent;
 import net.labymod.api.models.addon.annotation.AddonMain;
 import net.labymod.api.notification.Notification;
@@ -18,11 +17,11 @@ public class GrieferGamesCustomblocksAddon extends LabyAddon<GrieferGamesCustomb
   public static final String NAMESPACE = Laby.labyAPI().getNamespace(GrieferGamesCustomblocksAddon.class);
   public static final Icon CUSTOMBLOCKS_ICON = Icon.texture(ResourceLocation.create(NAMESPACE, "textures/icon.png"));
 
-  private FabricModDownloader downloader;
+  private ForgeModDownloader downloader;
 
-  private FabricModDownloader getDownloader() {
+  private ForgeModDownloader getDownloader() {
     if(downloader == null) {
-      downloader = new FabricModDownloader(this);
+      downloader = new ForgeModDownloader(this);
     }
     return downloader;
   }
@@ -37,7 +36,7 @@ public class GrieferGamesCustomblocksAddon extends LabyAddon<GrieferGamesCustomb
       return;
     }
     logger().info("Downloading FabricMod for Version: " + this.labyAPI().minecraft().getVersion());
-    Notification notification = getDownloader().downloadFabricModVersion(this.labyAPI().minecraft().getVersion());
+    Notification notification = getDownloader().downloadForgeModVersion(this.labyAPI().minecraft().getVersion());
     if(notification != null) {
       this.labyAPI().notificationController().push(notification);
     }

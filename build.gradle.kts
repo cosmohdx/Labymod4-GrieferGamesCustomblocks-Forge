@@ -8,22 +8,22 @@ plugins {
 }
 
 group = "net.griefergames"
-version = "1.0.2"
+version = "1.0.0"
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 labyMod {
     defaultPackageName = "net.griefergames.customblocks" //change this to your main package name (used by all modules)
     addonInfo {
-        namespace = "customblocks"
-        displayName = "GrieferGames CustomBlocks"
+        namespace = "customblocks_forge"
+        displayName = "GrieferGames CustomBlocks Forge"
         author = "GrieferGames CosmoHDx"
-        description = "Provides CustomBlocks for GrieferGames via LabyMod Fabric"
-        minecraftVersion = "1.20<*"
+        description = "Provides CustomBlocks for GrieferGames via LabyMod Forge Loader"
+        minecraftVersion = "1.8.9"
         version = System.getenv().getOrDefault("VERSION", project.version.toString())
         iconUrl = "textures/icon.png"
         addonDependencies = mutableListOf(
-                AddonDependency("labyfabric", false)
+                AddonDependency("labyforge", false)
         )
         metas = mutableListOf(
                 AddonMeta.RESTART_REQUIRED
@@ -32,8 +32,7 @@ labyMod {
 
     minecraft {
         registerVersions(
-                "1.20.1",
-                "1.20.2"
+                "1.8.9"
         ) { version, provider ->
             configureRun(provider, version)
         }
@@ -76,7 +75,7 @@ fun configureRun(provider: net.labymod.gradle.core.minecraft.provider.VersionPro
 
     provider.javaVersion = when (gameVersion) {
         else -> {
-            JavaVersion.VERSION_17
+            JavaVersion.VERSION_1_8
         }
     }
 
@@ -85,7 +84,6 @@ fun configureRun(provider: net.labymod.gradle.core.minecraft.provider.VersionPro
             "1.8.9", "1.12.2", "1.16.5" -> {
                 "0.6.6"
             }
-
             else -> {
                 "0.8.2"
             }

@@ -26,13 +26,11 @@ import net.labymod.api.util.version.SemanticVersion;
 /**
  * Downloader of the FabricMod from Resources of the jar
  */
-public class FabricModDownloader {
-
-  private static final String FABRIC_API_FILE_NAME = "fabric-api-{version}+{minecraftVersion}.jar";
+public class ForgeModDownloader {
 
   private final GrieferGamesCustomblocksAddon addon;
 
-  public FabricModDownloader(GrieferGamesCustomblocksAddon addon) {
+  public ForgeModDownloader(GrieferGamesCustomblocksAddon addon) {
     this.addon = addon;
   }
 
@@ -78,26 +76,25 @@ public class FabricModDownloader {
    * @param version Version
    * @return Notification if there is smth to display for the user
    */
-  public Notification downloadFabricModVersion(String version) {
-    checkFabricPaths(version);
+  public Notification downloadForgeModVersion(String version) {
+    checkForgePaths(version);
 
     VersionData versionData = getVersionData();
     if(versionData == null) {
       this.addon.logger().error("Failed to load version_data.json. Try update the LabyMod Addon.");
       return Notification.builder()
-          .title(Component.translatable("customblocks.fabricmod_update_broken.title"))
-          .text(Component.translatable("customblocks.fabricmod_update_broken.content"))
+          .title(Component.translatable("customblocks.forgemod_update_broken.title"))
+          .text(Component.translatable("customblocks.forgemod_update_broken.content"))
           .icon(GrieferGamesCustomblocksAddon.CUSTOMBLOCKS_ICON)
           .build();
     }
 
     if(!versionData.versions.containsKey(version)) {
-      this.addon.logger().info("No Fabric Mod for Minecraft "+version+" found");
+      this.addon.logger().info("No Forge Mod for Minecraft "+version+" found");
       return null;
     }
-    downloadFabricApiVersion(versionData, version);
     if(checkModVersionExists(versionData.versions.get(version))) {
-      this.addon.logger().info("Fabric Mod for Minecraft "+version+" is already up to date");
+      this.addon.logger().info("Forge Mod for Minecraft "+version+" is already up to date");
       return null;
     }
     removeOlderVersions(version, versionData.versions.get(version), versionData.fileName);
@@ -141,7 +138,7 @@ public class FabricModDownloader {
    * Checks if the farbic mod path is existing, if not it creates it
    * @param version The version to check
    */
-  private void checkFabricPaths(String version) {
+  private void checkForgePaths(String version) {
     try {
       // Create Farbic Mods part if its not existing
       Files.createDirectories(
@@ -159,7 +156,7 @@ public class FabricModDownloader {
    * @return true if the Fabric Mod is already downloaded
    */
   private boolean checkModVersionExists(String farbicVersion) {
-    ModInfo customBlocksMod = ModLoaderRegistry.instance().getById(ModLoaderId.FABRIC).getModInfo("mysterymod_customblocks");
+    ModInfo customBlocksMod = ModLoaderRegistry.instance().getById(ModLoaderId.FORGE).getModInfo("mysterymod_customblocks");
     if(customBlocksMod == null) {
       return false;
     }

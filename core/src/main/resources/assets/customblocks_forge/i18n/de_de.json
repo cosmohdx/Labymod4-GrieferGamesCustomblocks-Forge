@@ -15,19 +15,19 @@
         "text": "Öffnen"
       }
     },
-    "missing_labyfabric": {
-      "title": "§4LabyFabric ist nicht installiert",
+    "missing_labyforge": {
+      "title": "§4Forge Loader ist nicht installiert",
       "content": "§fDie GrieferGames CustomBlocks können nicht geladen werden."
     },
-    "fabricmod_updated": {
+    "forgemod_updated": {
       "title": "§aCustomBlocks wurde aktualisiert",
       "content": "§fBitte starte dein Spiel neu, um die neuste Version zu verwenden."
     },
-    "fabricmod_update_error": {
+    "forgemod_update_error": {
       "title": "§cAktualisierung fehlgeschlagen",
       "content": "§fGrieferGames CustomBlocks konnte nicht aktualisiert werden."
     },
-    "fabricmod_update_broken": {
+    "forgemod_update_broken": {
       "title": "§cAktualisierung fehlgeschlagen",
       "content": "§fGrieferGames CustomBlocks konnte nicht aktualisiert werden."
     }
