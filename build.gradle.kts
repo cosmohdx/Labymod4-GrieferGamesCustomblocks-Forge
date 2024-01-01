@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "net.griefergames"
-version = "1.0.1"
+version = "1.0.2"
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
@@ -19,7 +19,7 @@ labyMod {
         displayName = "GrieferGames CustomBlocks Forge"
         author = "GrieferGames CosmoHDx"
         description = "Provides CustomBlocks for GrieferGames via LabyMod Forge Loader"
-        minecraftVersion = "1.8.9"
+        minecraftVersion = "1.8.9,1.12.2"
         version = System.getenv().getOrDefault("VERSION", project.version.toString())
         iconUrl = "textures/icon.png"
         addonDependencies = mutableListOf(
@@ -32,7 +32,8 @@ labyMod {
 
     minecraft {
         registerVersions(
-                "1.8.9"
+                "1.8.9",
+                "1.12.2"
         ) { version, provider ->
             configureRun(provider, version)
         }
