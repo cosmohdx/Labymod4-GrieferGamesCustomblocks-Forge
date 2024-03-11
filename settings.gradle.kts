@@ -1,7 +1,7 @@
 rootProject.name = "griefergames_customblocks_forge"
 
 pluginManagement {
-    val labyGradlePluginVersion = "0.3.30"
+    val labyGradlePluginVersion = "0.3.44"
     plugins {
         id("net.labymod.gradle") version (labyGradlePluginVersion)
     }

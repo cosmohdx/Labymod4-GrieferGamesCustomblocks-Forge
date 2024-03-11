@@ -123,9 +123,7 @@ public class ForgeModDownloader {
   private void checkForgePaths(String version) {
     try {
       // Create Farbic Mods part if its not existing
-      Files.createDirectories(
-          GrieferGamesCustomblockConstants.versionedPath(GrieferGamesCustomblockConstants.MODS_DIRECTORY_PATH, version)
-          , (FileAttribute<?>[])new FileAttribute[0]);
+      Files.createDirectories(GrieferGamesCustomblockConstants.MODS_DIRECTORY_PATH, (FileAttribute<?>[])new FileAttribute[0]);
     } catch (IOException exception) {
       throw new RuntimeException("Failed to create versioned mod directories", exception);
     }
@@ -154,7 +152,7 @@ public class ForgeModDownloader {
    */
   private void removeOlderVersions(String mcVersion, String forgeVersion, String fileName) {
     //@TODO Change to ModLoaderRegistry when its possible within api
-    File modsDirectory = GrieferGamesCustomblockConstants.versionedPath(GrieferGamesCustomblockConstants.MODS_DIRECTORY_PATH, mcVersion).toFile();
+    File modsDirectory = GrieferGamesCustomblockConstants.MODS_DIRECTORY_PATH.toFile();
     File[] files = modsDirectory.listFiles();
     for(File file : files) {
       if(file.getName().startsWith(fileName.replace("{minecraftVersion}", mcVersion).replace("{version}", ""))) {
@@ -172,9 +170,7 @@ public class ForgeModDownloader {
    * @return Notification if the download was successful
    */
   private Notification downloadForgeMod(String mcVersion, String forgeVersion, String fileName) {
-    File DOWNLOAD_AS_FILE = new File(
-    GrieferGamesCustomblockConstants.versionedPath(GrieferGamesCustomblockConstants.MODS_DIRECTORY_PATH, mcVersion)
-        .toFile(), fileName.replace("{minecraftVersion}", mcVersion).replace("{version}", forgeVersion)
+    File DOWNLOAD_AS_FILE = new File(GrieferGamesCustomblockConstants.MODS_DIRECTORY_PATH.toFile(), fileName.replace("{minecraftVersion}", mcVersion).replace("{version}", forgeVersion)
     );
     boolean success = false;
     try (BufferedInputStream in = new BufferedInputStream(getResourceAsStream("forge-mod/"+mcVersion+".jar"))) {
